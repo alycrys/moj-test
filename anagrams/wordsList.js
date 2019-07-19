@@ -1,19 +1,14 @@
-
-const {promisify} = require('util');
-const {readFile} = require('fs');
+const { promisify } = require('util');
+const { readFile } = require('fs');
 
 const readFrom = promisify(readFile);
 
-const getWordsList = async (path) => {
+const getWordsList = async path => {
   const words = await readFrom(path, {
-    encoding: 'utf-8'
-  })
-  const wordsObj = words.split('\n');
+    encoding: 'utf-8',
+  });
 
-
-  console.log('wordsObj', wordsObj)
-
-  return wordsObj;
-}
+  return words.split('\n');
+};
 
 module.exports = getWordsList;

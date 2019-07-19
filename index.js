@@ -1,28 +1,26 @@
-
 const express = require('express');
-const getWordsList = require('./anagrams/wordsList')
+const getWordsList = require('./anagrams/wordsList');
+const filterThroughWordsAnagrams = require('./anagrams/anagram');
 
-const wordsList = {}
+let wordsList = [];
 var app = express();
 
-app.use(function(req, res, next){
-  console.log("Start");
+app.use(function(req, res, next) {
+  console.log('Start');
   next();
 });
 
-app.get('/:id', async function(req, res){
-  // res.send('The id you specified is ' + req.params.id.split(','));
-  res.send(wordsList)
-  
+app.get('/:id', async function(req, res) {
+  const requestedWords = req.params.id.split(',');
+  const results = filterThroughWordsAnagrams(requestedWords, wordsList);
+
+  res.send(results);
 });
 
-app.use('/', function(req, res){
+app.use('/', function(req, res) {
   console.log('End');
 });
 
 app.listen(3000, async () => {
-  const computedWords = await getWordsList('./wordlist.txt');
-
-  Object.assign(wordsList, computedWords)
-})
-
+  wordsList = await getWordsList('./wordlist.txt');
+});
