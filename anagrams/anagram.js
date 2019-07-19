@@ -1,24 +1,25 @@
-const sortedWord = word => {
+/**
+ * Sorts word alphabetically
+ * @param {string} word
+ * @returns {string} sorted word
+ */
+const sorted = word => {
   const chars = word.toLowerCase().split('');
   const sortedChars = chars.sort();
   return sortedChars.join('');
 };
 
-const createAnagramObj = wordsArr => {
-  return wordsArr.map(item => ({ hash: sortedWord(item), value: item }));
-};
-
+/**
+ * Filter for sorted requested words through the new anagram array
+ * @param {array} requestedWords - request params
+ * @param {array} wordsList - word list from API
+ * @returns {object}
+ */
 const filterThroughWordsAnagrams = (requestedWords, wordsList) => {
-  const anagramedWords = createAnagramObj(wordsList);
-
   const resultsArr = requestedWords.map(requestedWord => {
-    const filteredAnagrams = anagramedWords
-      .filter(
-        anagramedWord =>
-          anagramedWord.hash === sortedWord(requestedWord) &&
-          anagramedWord.value !== requestedWord,
-      )
-      .map(item => item.value);
+    const filteredAnagrams = wordsList.filter(
+      word => sorted(word) === sorted(requestedWord) && word !== requestedWord,
+    );
     return { hash: requestedWord, value: filteredAnagrams };
   });
 
@@ -30,4 +31,7 @@ const filterThroughWordsAnagrams = (requestedWords, wordsList) => {
   return resultsObj;
 };
 
-module.exports = filterThroughWordsAnagrams;
+module.exports = {
+  sorted,
+  filterThroughWordsAnagrams,
+};
